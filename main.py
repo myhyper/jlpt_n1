@@ -6,23 +6,25 @@ import random
 from playsound import playsound
 import threading
 
-day_count = 3 # 몇일째 단어장인가? 
-#level_name = "day" # N1급
+day_count = 3 # How many days we've done? 
+level_name = "day" # N1
 
-day_count = 1 # 몇일째 단어장인가? 
-level_name = "n4_" # N4급
+#day_count = 1 # How many days we've done? 
+#level_name = "n4_" # N4
 
 # JSON
+# *.txt : just a note
+# *.json : [ {word, ans, idx, n_ok, n_ng} ] json list
 original_data_file_name = "./words/{}{:03d}.json".format(level_name,day_count) 
 
 arr_words = json.load(open(original_data_file_name,'r')) # JSON
 arr_word_sounds = []
-def load_sound_files(word_list_file_name):
-    f = open(word_list_file_name,'r')
+def load_sound_files(word_json_file_name):
+    arr = json.load(open(word_json_file_name,'r'))
     i = 0
-    while True:
+    for obj in arr:
         i += 1
-        tmp = f.readline()
+        tmp = obj["ans"]
         if 0 < len(tmp):
             tmp = tmp.replace("\n",'')
             arr_word_sounds.append(tmp)
@@ -35,10 +37,10 @@ def load_sound_files(word_list_file_name):
                 a = gTTS(tmp,lang='ja')
                 a.save(file_name)
         else: break
-    f.close()
 
+# Pre Loading...
 def bg_load_sound_files():
-    load_sound_files(original_data_file_name.replace("json","txt"))
+    load_sound_files(original_data_file_name)
 threading.Thread(target=bg_load_sound_files, args=()).start()
 
 
@@ -47,7 +49,7 @@ def bg_play_mp3(word_idx):
     playsound(file_name)
 
 
-## Random Word Game
+## Random Word Game Loop
 idx = random.randint(0,len(arr_words)-1) # JSON
 while True:
     obj_word = arr_words[idx] # JSON
@@ -60,12 +62,9 @@ while True:
     user_input = sys.stdin.readline().replace("\n",'') # Trim
 
     # Compare it into the logic
-    if "?" == user_input:
-        threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
-    elif "/" == user_input:
-        print("Hint : ", obj_word["ans"]) # JSON
-    elif "q" == user_input:
-        print("Hint : ", obj_word["ans"]) # JSON
+    if "?" == user_input:   threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
+    elif "/" == user_input: print("Hint : ", obj_word["ans"]) # JSON
+    elif "q" == user_input: print("Hint : ", obj_word["ans"]) # JSON
     else:
         if user_input.replace(" ",'') == word.replace("\n",'').replace(" ",''):
             print("[Direction] GOOD!")
