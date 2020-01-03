@@ -6,7 +6,7 @@ import random
 from playsound import playsound
 import threading
 
-day_count = 1 # How many days we've done? 
+day_count = 2 # How many days we've done? 
 level_name = "n1" # N1
 
 #day_count = 1 # How many days we've done? 
@@ -48,9 +48,13 @@ def bg_play_mp3(word_idx):
     file_name = "words/mp3/{}_{:03d}_{:03d}.mp3".format(level_name,day_count, word_idx+1)
     playsound(file_name)
 
+# Japanese Full width characters
+wide_to_ascii = dict((i, chr(i - 0xfee0)) for i in range(0xff01, 0xff5f))
+
 
 ## Random Word Game Loop
 idx = random.randint(0,len(arr_words)-1) # JSON
+last_idx = -1
 while True:
     obj_word = arr_words[idx] # JSON
     word = obj_word["word"]
@@ -62,17 +66,21 @@ while True:
     user_input = sys.stdin.readline().replace("\n",'') # Trim
 
     # Compare it into the logic
-    if 0 <= user_input.find("?") or 0 <= user_input.find("？"):   threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
-    elif 0 <= user_input.find("/"): print("Hint : ", obj_word["ans"]) # JSON
+    if 0 == len(user_input):   continue
+    elif 0 <= user_input.find("?") or 0 <= user_input.find("？"):   threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
+    elif 0 <= user_input.find("/") or 0 <= user_input.find("・"): print("Hint : ", obj_word["ans"]) # JSON
     elif "q" == user_input or "ｑ" == user_input: print("Good bye!");break
     else:
-        if user_input.replace(" ",'') == word.replace("\n",'').replace(" ",''):
+        if user_input.replace(" ",'').translate(wide_to_ascii).strip() == word.replace("\n",'').replace(" ",'').translate(wide_to_ascii).strip():
             playsound("./bgm/chime_up.wav")
             print("[Direction] GOOD!")
             obj_word["n_ok"] = str(int(obj_word["n_ok"])+1) # JSON
             
             # Next Word
             idx = random.randint(0,len(arr_words)-1)
+            while last_idx == idx:
+                idx = random.randint(0,len(arr_words)-1)
+            last_idx = idx
         else:
             playsound("./bgm/cough_x.wav")
             print("[Direction] Wrong. Try again!")
