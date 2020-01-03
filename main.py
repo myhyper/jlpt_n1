@@ -6,11 +6,11 @@ import random
 from playsound import playsound
 import threading
 
-#day_count = 3 # How many days we've done? 
-#level_name = "n1" # N1
-
 day_count = 1 # How many days we've done? 
-level_name = "n4" # N4
+level_name = "n1" # N1
+
+#day_count = 1 # How many days we've done? 
+#level_name = "n4" # N4
 
 # JSON
 # *.txt : make a list of word list manually
