@@ -6,8 +6,8 @@ import random
 from playsound import playsound
 import threading
 
-day_count = 2 # 몇일째 단어장인가? 
-#original_data_file_name = "./words/day{:03d}.txt".format(day_count) # TXT
+day_count = 3 # 몇일째 단어장인가? 
+#original_data_file_name1 = "./words/day{:03d}.txt".format(day_count) # TXT
 original_data_file_name = "./words/day{:03d}.json".format(day_count) # JSON
 
 arr_words = json.load(open(original_data_file_name,'r')) # JSON
@@ -33,7 +33,7 @@ def load_sound_files(word_list_file_name):
     f.close()
 
 def bg_load_sound_files():
-    load_sound_files(original_data_file_name)
+    load_sound_files(original_data_file_name.replace("json","txt"))
 threading.Thread(target=bg_load_sound_files, args=()).start()
 
 
@@ -53,7 +53,7 @@ while True:
     
     # GET USER INPUT
     user_input = sys.stdin.readline().replace("\n",'') # Trim
-    
+
     # Compare it into the logic
     if "?" == user_input:
         threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
