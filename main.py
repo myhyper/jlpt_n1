@@ -56,15 +56,15 @@ while True:
     word = obj_word["word"]
     
     print("[Direction] Type the same sentence ( Commands =>  ? Pronunciation  / Furigana  q quit ) : ")
-    print("[Direction] This : ", word)
+    print(word)
     
     # GET USER INPUT
     user_input = sys.stdin.readline().replace("\n",'') # Trim
 
     # Compare it into the logic
-    if "?" == user_input:   threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
-    elif "/" == user_input: print("Hint : ", obj_word["ans"]) # JSON
-    elif "q" == user_input: print("Good bye!");break
+    if 0 <= user_input.find("?") or 0 <= user_input.find("？"):   threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
+    elif 0 <= user_input.find("/"): print("Hint : ", obj_word["ans"]) # JSON
+    elif "q" == user_input or "ｑ" == user_input: print("Good bye!");break
     else:
         if user_input.replace(" ",'') == word.replace("\n",'').replace(" ",''):
             playsound("./bgm/chime_up.wav")
