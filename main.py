@@ -7,8 +7,13 @@ from playsound import playsound
 import threading
 
 day_count = 3 # 몇일째 단어장인가? 
-#original_data_file_name1 = "./words/day{:03d}.txt".format(day_count) # TXT
-original_data_file_name = "./words/day{:03d}.json".format(day_count) # JSON
+#level_name = "day" # N1급
+
+day_count = 1 # 몇일째 단어장인가? 
+level_name = "n4_" # N4급
+
+# JSON
+original_data_file_name = "./words/{}{:03d}.json".format(level_name,day_count) 
 
 arr_words = json.load(open(original_data_file_name,'r')) # JSON
 arr_word_sounds = []
@@ -22,7 +27,7 @@ def load_sound_files(word_list_file_name):
             tmp = tmp.replace("\n",'')
             arr_word_sounds.append(tmp)
             
-            file_name = "./words/mp3/{:03d}_{:03d}.mp3".format(day_count, i)
+            file_name = "./words/mp3/{}{:03d}_{:03d}.mp3".format(level_name,day_count, i)
             try:
                 open(file_name, 'r')
             except: # if not exists
@@ -38,7 +43,7 @@ threading.Thread(target=bg_load_sound_files, args=()).start()
 
 
 def bg_play_mp3(word_idx):
-    file_name = "words/mp3/{:03d}_{:03d}.mp3".format(day_count, word_idx+1)
+    file_name = "words/mp3/{}{:03d}_{:03d}.mp3".format(level_name,day_count, word_idx+1)
     playsound(file_name)
 
 
