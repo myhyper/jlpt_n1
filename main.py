@@ -5,6 +5,7 @@ import sys
 import random
 from playsound import playsound
 import threading
+import difflib
 
 day_count = 4 # How many days we've done? 
 level_name = "n1" # N1
@@ -92,7 +93,9 @@ while True:
     elif 0 <= user_input.find("/") or 0 <= user_input.find("・"): print("Hint : ", obj_word["ans"]) # JSON
     elif "q" == user_input or "ｑ" == user_input: print("Good bye!");break
     else:
-        if user_input.replace(" ",'').translate(wide_to_ascii).strip() == word.replace("\n",'').replace(" ",'').translate(wide_to_ascii).strip():
+        str_a = user_input.replace(" ",'').translate(wide_to_ascii).strip()
+        str_b = word.replace("\n",'').replace(" ",'').translate(wide_to_ascii).strip()
+        if str_a == str_b:
             playsound("./bgm/nice-work.wav")
             print("[Direction] nice work!")
             obj_word["n_ok"] = str(int(obj_word["n_ok"])+1) # JSON
@@ -104,7 +107,11 @@ while True:
             last_idx = idx
         else:
             playsound("./bgm/no-1.wav")
-            print("[Direction] no! try again!")
+            output_list = [li for li in difflib.ndiff(str_a, str_b) if li[0] != ' ']
+            char = ""
+            for ch in output_list:
+                char += ch
+            print("[Direction] no! try again! " + char)
             obj_word["n_ng"] = str(int(obj_word["n_ng"])+1) # JSON
             
         # Save the result
