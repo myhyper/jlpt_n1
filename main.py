@@ -6,7 +6,7 @@ import random
 from playsound import playsound
 import threading
 
-day_count = 2 # How many days we've done? 
+day_count = 4 # How many days we've done? 
 level_name = "n1" # N1
 
 #day_count = 1 # How many days we've done? 
@@ -17,14 +17,35 @@ level_name = "n1" # N1
 # *.json : [ {word, ans, idx, n_ok, n_ng} ] a json list will be generated automatically
 original_data_file_name = "./words/{}_{:03d}.json".format(level_name,day_count) 
 
-arr_words = json.load(open(original_data_file_name,'r')) # JSON
+try:
+    arr_words = json.load(open(original_data_file_name,'r')) # JSON
+except: # json이 없는 경우 자동으로 새로 생성 하자.
+    f = open(original_data_file_name.replace("json","txt"),'r')
+    i = 0
+    arr_words = []
+    while True:
+        i += 1
+        line = f.readline()
+        if len(line) <= 0: break
+        line = line.replace("\n",'')
+        arr_words.append({
+            "idx":"{}".format(i),
+            "word":line,
+            "ans":line,
+            "n_ok":"0",
+            "n_ng":"0"
+        })
+    # Save the result
+    json.dump(arr_words, open(original_data_file_name,'w+'), indent=4, ensure_ascii=False) # JSON
+    
 arr_word_sounds = []
 def load_sound_files(word_json_file_name):
     arr = json.load(open(word_json_file_name,'r'))
     i = 0
     for obj in arr:
         i += 1
-        tmp = obj["ans"]
+        #tmp = obj["ans"]
+        tmp = obj["word"]
         if 0 < len(tmp):
             tmp = tmp.replace("\n",'')
             arr_word_sounds.append(tmp)
@@ -72,8 +93,8 @@ while True:
     elif "q" == user_input or "ｑ" == user_input: print("Good bye!");break
     else:
         if user_input.replace(" ",'').translate(wide_to_ascii).strip() == word.replace("\n",'').replace(" ",'').translate(wide_to_ascii).strip():
-            playsound("./bgm/chime_up.wav")
-            print("[Direction] GOOD!")
+            playsound("./bgm/nice-work.wav")
+            print("[Direction] nice work!")
             obj_word["n_ok"] = str(int(obj_word["n_ok"])+1) # JSON
             
             # Next Word
@@ -82,8 +103,8 @@ while True:
                 idx = random.randint(0,len(arr_words)-1)
             last_idx = idx
         else:
-            playsound("./bgm/cough_x.wav")
-            print("[Direction] Wrong. Try again!")
+            playsound("./bgm/no-1.wav")
+            print("[Direction] no! try again!")
             obj_word["n_ng"] = str(int(obj_word["n_ng"])+1) # JSON
             
         # Save the result
