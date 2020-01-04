@@ -74,6 +74,28 @@ def bg_play_mp3(word_idx):
 wide_to_ascii = dict((i, chr(i - 0xfee0)) for i in range(0xff01, 0xff5f))
 
 
+#
+def get_next_word(last_idx):
+    max_idx = -1;i=0
+    max_val = -1
+    min_idx = 999
+    min_val = 999
+    for word in arr_words:
+        v = int(word["n_ok"])
+        if max_val < v: 
+            max_idx = i
+            max_val = v
+        if v < min_val:
+            min_idx = i
+            min_val = v
+        i += 1
+    idx = random.randint(0,len(arr_words)-1)
+    while last_idx == idx or min_val < int(arr_words[idx]["n_ok"]):
+        idx = random.randint(0,len(arr_words)-1)
+        if min_idx == idx: break # if it's very low, pop it
+    print("You've rotated : ", arr_words[min_idx]["n_ok"])
+    return idx
+
 ## Random Word Game Loop
 idx = random.randint(0,len(arr_words)-1) # JSON
 last_idx = -1
@@ -81,8 +103,14 @@ while True:
     obj_word = arr_words[idx] # JSON
     word = obj_word["word"]
     
+    print("[Commands] ? Pronunciation ")
+    print("[Commands] / Furigana ")
+    print("[Commands] q quit ")
+    print("[Commands] n next (skip) ")
     print("[Direction] Type the same sentence ( Commands =>  ? Pronunciation  / Furigana  q quit ) : ")
     print(word)
+    if 0 == int(obj_word["n_ok"]): # if it's first time
+        threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
     
     # GET USER INPUT
     user_input = sys.stdin.readline().replace("\n",'') # Trim
@@ -93,26 +121,27 @@ while True:
     elif 0 <= user_input.find("/") or 0 <= user_input.find("・"): print("Hint : ", obj_word["ans"]) # JSON
     elif "q" == user_input or "ｑ" == user_input: print("Good bye!");break
     else:
-        str_a = user_input.replace(" ",'').translate(wide_to_ascii).strip()
-        str_b = word.replace("\n",'').replace(" ",'').translate(wide_to_ascii).strip()
-        if str_a == str_b:
-            playsound("./bgm/nice-work.wav")
-            print("[Direction] nice work!")
-            obj_word["n_ok"] = str(int(obj_word["n_ok"])+1) # JSON
-            
-            # Next Word
-            idx = random.randint(0,len(arr_words)-1)
-            while last_idx == idx:
-                idx = random.randint(0,len(arr_words)-1)
-            last_idx = idx
+        if "n" == user_input or "ｎ" == user_input: #skip
+            idx = last_idx = get_next_word(last_idx)
         else:
-            playsound("./bgm/no-1.wav")
-            output_list = [li for li in difflib.ndiff(str_a, str_b) if li[0] != ' ']
-            char = ""
-            for ch in output_list:
-                char += ch
-            print("[Direction] no! try again! " + char)
-            obj_word["n_ng"] = str(int(obj_word["n_ng"])+1) # JSON
-            
+            str_a = user_input.replace(" ",'').translate(wide_to_ascii).strip()
+            str_b = word.replace("\n",'').replace(" ",'').translate(wide_to_ascii).strip()
+            if str_a == str_b:
+                playsound("./bgm/nice-work.wav")
+                print("[Direction] nice work!")
+                obj_word["n_ok"] = str(int(obj_word["n_ok"])+1) # JSON
+                
+                # Next Word
+                idx = last_idx = get_next_word(last_idx)
+            else:
+                playsound("./bgm/no-1.wav")
+                output_list = [li for li in difflib.ndiff(str_a, str_b) if li[0] != ' ']
+                char = ""
+                for ch in output_list:
+                    char += ch
+                print("[Direction] no! try again! " + char)
+                obj_word["n_ng"] = str(int(obj_word["n_ng"])+1) # JSON
+        
+        print("")
         # Save the result
         json.dump(arr_words, open(original_data_file_name,'w+'), indent=4, ensure_ascii=False) # JSON
