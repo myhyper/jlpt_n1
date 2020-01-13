@@ -7,7 +7,7 @@ from playsound import playsound
 import threading
 import difflib
 
-day_count = 10 # How many days we've done? 
+day_count = 2 # How many days we've done? 
 level_name = "n1" # N1
 
 #day_count = 1 # How many days we've done? 
@@ -41,6 +41,16 @@ except: # json이 없는 경우 자동으로 새로 생성 하자.
     
 arr_word_sounds = []
 def load_sound_files(word_json_file_name):
+    
+    
+    cnt = 0
+    for i in range(1,day_count):
+        file_name = "./words/{}_{:03d}_{:03d}.json".format(level_name, i)
+        objs = json.load(open(file_name,'r'))
+        cnt += len(objs)
+        print(cnt)
+        
+        
     arr = json.load(open(word_json_file_name,'r'))
     i = 0
     for obj in arr:
@@ -67,6 +77,7 @@ threading.Thread(target=bg_load_sound_files, args=()).start()
 
 
 def bg_play_mp3(word_idx):
+
     file_name = "words/mp3/{}_{:03d}_{:03d}.mp3".format(level_name,day_count, word_idx+1)
     playsound(file_name)
 
