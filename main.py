@@ -7,7 +7,7 @@ from playsound import playsound
 import threading
 import difflib
 
-day_count = 2 # How many days we've done? 
+day_count = 18 # How many days we've done? 
 level_name = "n1" # N1
 
 #day_count = 1 # How many days we've done? 
@@ -45,7 +45,8 @@ def load_sound_files(word_json_file_name):
     
     cnt = 0
     for i in range(1,day_count):
-        file_name = "./words/{}_{:03d}_{:03d}.json".format(level_name, i)
+        #file_name = "./words/{}_{:03d}_{:03d}.json".format(level_name, day_count, i)
+        file_name = "./words/{}_{:03d}.json".format(level_name, day_count)
         objs = json.load(open(file_name,'r'))
         cnt += len(objs)
         print(cnt)
