@@ -9,7 +9,7 @@ import difflib
 
 # 62 63 64 65 66 67 68
 # 69 70 71 72 73 74 75
-day_count = 1 # How many days we've done? 
+day_count = 62 # How many days we've done? 
 level_name = "n1" # N1
 
 #day_count = 1 # How many days we've done? 
@@ -81,9 +81,12 @@ if False:
 def bg_play_mp3(word_idx):
     #file_name = "words/mp3/{}_{:03d}_{:03d}.mp3".format(level_name, day_count, word_idx+1)
     #file_name = "words/mp3/{}_{:03d}_{:03d}.mp3".format(level_name, day_count, word_idx+1)
-    n_folder = int(day_count / 500) + 1
-    file_name = "words/mp3_native{}/N1v_{:04d}s.mp3".format(n_folder, day_count * 10 + (word_idx+0))
-    playsound(file_name)
+    file_name = "words/mp3_native1/N1v_{:04d}s.mp3".format(day_count * 10 + (word_idx+1))
+    print("mp3 load : ", file_name)
+    try:
+        playsound(file_name)
+    except:
+        playsound(file_name.replace("s.mp3", "s1.mp3"))
 
 # Japanese Full width characters
 wide_to_ascii = dict((i, chr(i - 0xfee0)) for i in range(0xff01, 0xff5f))
@@ -123,10 +126,11 @@ while True:
     print("[Commands] q quit ")
     print("[Commands] n next (skip) ")
     print("[Direction] Type the same sentence ( Commands =>  ? Pronunciation  / Furigana  q quit ) : ")
-    print(word)
     if 0 == int(obj_word["n_ok"]): # if it's first time
+        print("idx : ", idx)
         threading.Thread(target=bg_play_mp3, args=([idx])).start() # Sound
     
+    print(word)
     # GET USER INPUT
     user_input = sys.stdin.readline().replace("\n",'') # Trim
 
@@ -142,14 +146,16 @@ while True:
             str_a = user_input.replace(" ",'').translate(wide_to_ascii).strip()
             str_b = word.replace("\n",'').replace(" ",'').translate(wide_to_ascii).strip()
             if str_a == str_b:
-                playsound("./bgm/nice-work.wav")
+                if False:
+                    playsound("./bgm/nice-work.wav")
                 print("[Direction] nice work!")
                 obj_word["n_ok"] = str(int(obj_word["n_ok"])+1) # JSON
                 
                 # Next Word
                 idx = last_idx = get_next_word(last_idx)
             else:
-                playsound("./bgm/no-1.wav")
+                if False:
+                    playsound("./bgm/no-1.wav")
                 output_list = [li for li in difflib.ndiff(str_a, str_b) if li[0] != ' ']
                 char = ""
                 for ch in output_list:
