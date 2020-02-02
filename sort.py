@@ -14,9 +14,9 @@ def save_words():
     for _ in range(0,len(arr)):
         if (_ % 10) is 0:
             n1 += 1
-            f = open("words/n1_{_03d}.txt".format(n1),"w")
-        #print("{:03d}".format(n1), cnt)
+            f = open("words/n1_{:03d}.txt".format(n1),"w")
+        ##print("{:03d}".format(n1), cnt)
         
         f.write(arr[_-1])
         cnt += 1
-save_words()
+#save_words()

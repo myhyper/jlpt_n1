@@ -7,8 +7,9 @@ from playsound import playsound
 import threading
 import difflib
 
-# 26 27 28 29 30 31 01
-day_count = 26 # How many days we've done? 
+# 62 63 64 65 66 67 68
+# 69 70 71 72 73 74 75
+day_count = 1 # How many days we've done? 
 level_name = "n1" # N1
 
 #day_count = 1 # How many days we've done? 
@@ -42,8 +43,6 @@ except: # json이 없는 경우 자동으로 새로 생성 하자.
     
 arr_word_sounds = []
 def load_sound_files(word_json_file_name):
-    
-    
     cnt = 0
     for i in range(1,day_count):
         #file_name = "./words/{}_{:03d}_{:03d}.json".format(level_name, day_count, i)
@@ -75,12 +74,15 @@ def load_sound_files(word_json_file_name):
 # Pre Loading...
 def bg_load_sound_files():
     load_sound_files(original_data_file_name)
-threading.Thread(target=bg_load_sound_files, args=()).start()
+if False:
+    threading.Thread(target=bg_load_sound_files, args=()).start()
 
 
 def bg_play_mp3(word_idx):
-
-    file_name = "words/mp3/{}_{:03d}_{:03d}.mp3".format(level_name,day_count, word_idx+1)
+    #file_name = "words/mp3/{}_{:03d}_{:03d}.mp3".format(level_name, day_count, word_idx+1)
+    #file_name = "words/mp3/{}_{:03d}_{:03d}.mp3".format(level_name, day_count, word_idx+1)
+    n_folder = int(day_count / 500) + 1
+    file_name = "words/mp3_native{}/N1v_{:04d}s.mp3".format(n_folder, day_count * 10 + (word_idx+0))
     playsound(file_name)
 
 # Japanese Full width characters
