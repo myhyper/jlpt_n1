@@ -7,7 +7,7 @@ from playsound import playsound
 import threading
 import difflib
 
-# 20 21 22 23 24 25 26
+# 26 27 28 29 30 31 01
 day_count = 26 # How many days we've done? 
 level_name = "n1" # N1
 
