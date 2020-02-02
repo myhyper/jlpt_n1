@@ -7,6 +7,11 @@ from playsound import playsound
 import threading
 import difflib
 
+# Week1 Jan 5
+# Week2 Jan 12
+# Week3 Jan 19
+# Week4 Jan 26
+# Week5 Feb 2
 # 62 63 64 65 66 67 68
 # 69 70 71 72 73 74 75
 day_count = 62 # How many days we've done? 
