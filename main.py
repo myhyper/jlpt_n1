@@ -14,7 +14,7 @@ import difflib
 # Week5 Feb 2
 # 62 63 64 65 66 67 68
 # 69 70 71 72 73 74 75
-day_count = 62 # How many days we've done? 
+day_count = 75 # How many days we've done? 
 level_name = "n1" # N1
 
 #day_count = 1 # How many days we've done? 
