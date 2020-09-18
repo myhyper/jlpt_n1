@@ -1,8 +1,11 @@
 import time
 import random
 
+# GameNumber = 0
+GameNumber = 1
+
 arr = []
-file_name = "./shorts/n1_%03d.txt" % (0)
+file_name = "./shorts/n1_%03d.txt" % (GameNumber)
 with open(file_name) as f:
     s = 1
     cnt = 0
