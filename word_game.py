@@ -2,11 +2,19 @@ import time
 import random
 import tkinter as tk
 
-# GameNumber = 0
-GameNumber = 3
-
 arr = []
+
+
+# shorts
+# 0 ~ 3
+GameNumber = 3
 file_name = "./shorts/n1_%03d.txt" % (GameNumber)
+
+# subs
+# 1 ~ 1
+GameNumber = 1
+file_name = "./subs/gangnam/%03d.txt" % (GameNumber)
+
 with open(file_name) as f:
     s = 1
     cnt = 0
@@ -14,13 +22,22 @@ with open(file_name) as f:
         s = f.readline().strip()
         if not s: break
         cnt += 1
-        obj = s.split(', ')
-        arr.append({
-            'kj': obj[0],
-            'fr': obj[1],
-            'kr': obj[2],
-            'cnt': 0
-        })
+        if ', ' in s:
+            obj = s.split(', ')
+            arr.append({
+                'kanji': obj[0],
+                'furigana': obj[1],
+                'kr': obj[2],
+                'cnt': 0
+            })
+        elif '　' in s:
+            obj = s.split('　')
+            arr.append({
+                'kanji': obj[0],
+                'furigana': obj[1],
+                # 'kr': obj[2],
+                'cnt': 0
+            })
 def sample (arr):
     LEN = len(arr)
     MIN = 99999
@@ -61,9 +78,9 @@ else: # GUI
         for k in el.keys():
             v = el[k]
             if 'cnt' == k: continue
-            elif 'kj' == k:
+            elif 'kanji' == k:
                 tk.Label(master, text=v, font=("Osaka", 64)).grid(row=0, sticky='nesw')
-            elif 'fr' == k:
+            elif 'furigana' == k:
                 tk.Label(master, text=v, font=("Osaka", 64)).grid(row=1, sticky='nesw')
             # elif 'kr' == k:
             #     tk.Label(master, text=v, font=("Osaka", 64)).grid(row=0)
@@ -89,5 +106,5 @@ else: # GUI
 
     master.bind("<space>", show_entry_fields)
 
-    master.geometry("800x600")
+    master.geometry("960x500")
     tk.mainloop()
