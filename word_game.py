@@ -12,7 +12,7 @@ file_name = "./shorts/n1_%03d.txt" % (GameNumber)
 
 # subs
 # 1 ~ 1
-GameNumber = 1
+GameNumber = 2
 file_name = "./subs/gangnam/%03d.txt" % (GameNumber)
 
 with open(file_name) as f:
@@ -70,20 +70,20 @@ if 0: # CUI
         print('')
 else: # GUI
     master = tk.Tk()
-    label = tk.Label(master, text="First Name", font=("Osaka", 64)).grid(row=0)
-    tk.Label(master, text="Last Name", font=("Osaka", 64)).grid(row=1)
-    def show_entry_fields(event=None):
-        # print("First Name: %s\nLast Name: %s" % (e1.get(), e2.get()))
+    label = tk.Label(master, text="Kanji", font=("Osaka", 56)).grid(row=0)
+    tk.Label(master, text="Furigana", font=("Osaka", 56)).grid(row=1)
+    def show_text_fields(event=None):
+        # print("Kanji: %s\nFurigana: %s" % (e1.get(), e2.get()))
         el = sample(arr)
         for k in el.keys():
             v = el[k]
             if 'cnt' == k: continue
             elif 'kanji' == k:
-                tk.Label(master, text=v, font=("Osaka", 64)).grid(row=0, sticky='nesw')
+                tk.Label(master, text=v, font=("Osaka", 56)).grid(row=0, sticky='nesw')
             elif 'furigana' == k:
-                tk.Label(master, text=v, font=("Osaka", 64)).grid(row=1, sticky='nesw')
+                tk.Label(master, text=v, font=("Osaka", 56)).grid(row=1, sticky='nesw')
             # elif 'kr' == k:
-            #     tk.Label(master, text=v, font=("Osaka", 64)).grid(row=0)
+            #     tk.Label(master, text=v, font=("Osaka", 56)).grid(row=0)
 
 
     e1 = tk.Entry(master)
@@ -93,7 +93,7 @@ else: # GUI
     e2.grid(row=1, column=1)
 
     tk.Button(master, 
-            text='Show', command=show_entry_fields).grid(row=3, 
+            text='Show', command=show_text_fields).grid(row=3, 
                                                         column=0, 
                                                         sticky=tk.W, 
                                                         pady=4)
@@ -104,7 +104,7 @@ else: # GUI
                                         sticky=tk.W, 
                                         pady=4)
 
-    master.bind("<space>", show_entry_fields)
+    master.bind("<space>", show_text_fields)
 
     master.geometry("960x500")
     tk.mainloop()
