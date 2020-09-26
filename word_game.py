@@ -2,7 +2,7 @@ import time
 import random
 
 # GameNumber = 0
-GameNumber = 1
+GameNumber = 2
 
 arr = []
 file_name = "./shorts/n1_%03d.txt" % (GameNumber)
