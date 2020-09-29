@@ -12,7 +12,7 @@ file_name = "./shorts/n1_%03d.txt" % (GameNumber)
 
 # subs
 # 1 ~ 1
-GameNumber = 2
+GameNumber = 8
 file_name = "./subs/gangnam/%03d.txt" % (GameNumber)
 
 with open(file_name) as f:
@@ -54,6 +54,7 @@ def sample (arr):
     return rtv
 
 DELAY = 0.5
+g_el = None
 
 if 0: # CUI
     for i in range(len(arr)):
@@ -73,17 +74,28 @@ else: # GUI
     label = tk.Label(master, text="Kanji", font=("Osaka", 56)).grid(row=0)
     tk.Label(master, text="Furigana", font=("Osaka", 56)).grid(row=1)
     def show_text_fields(event=None):
+        global g_el
         # print("Kanji: %s\nFurigana: %s" % (e1.get(), e2.get()))
         el = sample(arr)
+        g_el = el
         for k in el.keys():
             v = el[k]
             if 'cnt' == k: continue
             elif 'kanji' == k:
                 tk.Label(master, text=v, font=("Osaka", 56)).grid(row=0, sticky='nesw')
+            # elif 'furigana' == k:
+            #     tk.Label(master, text=v, font=("Osaka", 56)).grid(row=1, sticky='nesw')
             elif 'furigana' == k:
+                tk.Label(master, text='', font=("Osaka", 56)).grid(row=1, sticky='nesw')
+            # # elif 'kr' == k:
+            # #     tk.Label(master, text=v, font=("Osaka", 56)).grid(row=0)
+    def show_text_fields_fr(event=None):
+        global g_el
+        el = g_el
+        for k in el.keys():
+            v = el[k]
+            if 'furigana' == k:
                 tk.Label(master, text=v, font=("Osaka", 56)).grid(row=1, sticky='nesw')
-            # elif 'kr' == k:
-            #     tk.Label(master, text=v, font=("Osaka", 56)).grid(row=0)
 
 
     e1 = tk.Entry(master)
@@ -105,6 +117,7 @@ else: # GUI
                                         pady=4)
 
     master.bind("<space>", show_text_fields)
+    master.bind("<Return>", show_text_fields_fr)
 
     master.geometry("960x500")
     tk.mainloop()
