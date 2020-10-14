@@ -11,9 +11,14 @@ GameNumber = 3
 file_name = "./shorts/n1_%03d.txt" % (GameNumber)
 
 # subs
-# 1 ~ 1
+# 1 ~ 8
 GameNumber = 8
 file_name = "./subs/gangnam/%03d.txt" % (GameNumber)
+
+# books
+# 1 ~ 2
+GameNumber = 6
+file_name = "./subs/design/%03d.txt" % (GameNumber)
 
 with open(file_name) as f:
     s = 1
@@ -32,10 +37,13 @@ with open(file_name) as f:
             })
         elif '　' in s:
             obj = s.split('　')
+            kr = ''
+            if 2 < len(obj):
+                kr = obj[2]
             arr.append({
                 'kanji': obj[0],
                 'furigana': obj[1],
-                # 'kr': obj[2],
+                'kr': kr,
                 'cnt': 0
             })
 def sample (arr):
@@ -55,6 +63,7 @@ def sample (arr):
 
 DELAY = 0.5
 g_el = None
+g_kr = False
 
 if 0: # CUI
     for i in range(len(arr)):
@@ -71,10 +80,12 @@ if 0: # CUI
         print('')
 else: # GUI
     master = tk.Tk()
-    label = tk.Label(master, text="Kanji", font=("Osaka", 56)).grid(row=0)
+    label = tk.Label(master, text=" - - - - - - - - - - - - - - Kanji - - - - - - - - - - - - - - ", font=("Osaka", 56)).grid(row=0)
     tk.Label(master, text="Furigana", font=("Osaka", 56)).grid(row=1)
     def show_text_fields(event=None):
         global g_el
+        global g_kr
+        g_kr = False
         # print("Kanji: %s\nFurigana: %s" % (e1.get(), e2.get()))
         el = sample(arr)
         g_el = el
@@ -91,11 +102,14 @@ else: # GUI
             # #     tk.Label(master, text=v, font=("Osaka", 56)).grid(row=0)
     def show_text_fields_fr(event=None):
         global g_el
+        global g_kr
         el = g_el
-        for k in el.keys():
-            v = el[k]
-            if 'furigana' == k:
-                tk.Label(master, text=v, font=("Osaka", 56)).grid(row=1, sticky='nesw')
+        if not g_kr:
+            tk.Label(master, text=el['furigana'], font=("Osaka", 56)).grid(row=1, sticky='nesw')
+            g_kr = True
+        else:
+            tk.Label(master, text=el['kr'], font=("Osaka", 56)).grid(row=1, sticky='nesw')
+            g_kr = False
 
 
     e1 = tk.Entry(master)
@@ -119,5 +133,5 @@ else: # GUI
     master.bind("<space>", show_text_fields)
     master.bind("<Return>", show_text_fields_fr)
 
-    master.geometry("960x500")
+    master.geometry("1210x450")
     tk.mainloop()
