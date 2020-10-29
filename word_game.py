@@ -16,8 +16,8 @@ GameNumber = 8
 file_name = "./subs/gangnam/%03d.txt" % (GameNumber)
 
 # books
-# 1 ~ 2
-GameNumber = 4
+# 1 ~ 7
+GameNumber = 7
 file_name = "./subs/design/%03d.txt" % (GameNumber)
 
 with open(file_name) as f:
